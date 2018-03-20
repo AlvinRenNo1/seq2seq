@@ -193,8 +193,9 @@ def unicodeToAscii(s):
 
 def normalizeString(s):
     s = unicodeToAscii(s.lower().strip())
-    s = re.sub(r"([.!?])", r" \1", s)
-    s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)
+    s = re.sub(r"([,.!?])", r" \1", s)
+    s = re.sub(r"[^a-zA-Z,.!?]+", r" ", s)
+    s = re.sub(r"\s+", r" ", s).strip()
     return s
 
 
@@ -236,7 +237,7 @@ def readLangs(lang1, lang2, reverse=False):
 # earlier).
 #
 
-MAX_LENGTH = 10
+MAX_LENGTH = 15
 
 eng_prefixes = (
     "i am ", "i m ",
@@ -281,7 +282,7 @@ def prepareData(lang1, lang2, reverse=False):
     return input_lang, output_lang, pairs
 
 
-input_lang, output_lang, pairs = prepareData('eng', 'fra', True)
+input_lang, output_lang, pairs = prepareData('eng', 'deu', True)
 print(random.choice(pairs))
 
 
@@ -680,7 +681,7 @@ def trainIters(encoder, decoder, n_iters, print_every=1000, plot_every=100, lear
             plot_losses.append(plot_loss_avg)
             plot_loss_total = 0
 
-    showPlot(plot_losses)
+    #showPlot(plot_losses)
 
 
 ######################################################################
@@ -822,8 +823,8 @@ evaluateRandomly(encoder1, attn_decoder1)
 #
 
 output_words, attentions = evaluate(
-    encoder1, attn_decoder1, "je suis trop froid .")
-plt.matshow(attentions.numpy())
+    encoder1, attn_decoder1, "mir geht es gut .")
+#plt.matshow(attentions.numpy())
 
 
 ######################################################################
@@ -855,16 +856,16 @@ def evaluateAndShowAttention(input_sentence):
         encoder1, attn_decoder1, input_sentence)
     print('input =', input_sentence)
     print('output =', ' '.join(output_words))
-    showAttention(input_sentence, output_words, attentions)
+    #showAttention(input_sentence, output_words, attentions)
 
 
-evaluateAndShowAttention("elle a cinq ans de moins que moi .")
+evaluateAndShowAttention("ich hab s gemacht .")
 
-evaluateAndShowAttention("elle est trop petit .")
+evaluateAndShowAttention("ich verstehe , was du meinst .")
 
-evaluateAndShowAttention("je ne crains pas de mourir .")
+evaluateAndShowAttention("es ist ernst gemeint von mir .")
 
-evaluateAndShowAttention("c est un jeune directeur plein de talent .")
+evaluateAndShowAttention("sie ist freundlich .")
 
 
 ######################################################################
